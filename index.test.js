@@ -24,16 +24,18 @@ describe("User, Board and Cheese test suite", function() {
     })
 
     test("Can create a cheese", async function() {
-        const cheese = await Cheese.create({title: "Brie", description: "Soft"})
-        expect(cheese.title).toBe("Brie")
-        expect(cheese.description).toBe("Soft")
+        const cheese1 = await Cheese.create({title: "Brie", description: "Soft"})
+        const cheese2 = await Cheese.create({title: "Edam", description: "Hard"})
+        expect(cheese1.title).toBe("Brie")
+        expect(cheese2.title).toBe("Edam")
+        expect(cheese1.description).toBe("Soft")
+        expect(cheese2.description).toBe("Hard")
     })
 
     test("Check User-Board association", async function() {
         const user = await User.findByPk(1)
         await user.addBoards([1,2])
         const board1 = await user.getBoards(user[1])
-        console.log("board1", board1)
         const board2 = await user.getBoards(user[2])
         expect(board1[0].type).toBe("French")
         expect(board2[1].type).toBe("Swiss")
@@ -43,5 +45,15 @@ describe("User, Board and Cheese test suite", function() {
         expect(board2[1].rating).toBe(2)
         expect(board1[0].UserId).toBe(1)
         expect(board2[1].UserId).toBe(1)
+    })
+
+    test("Check Board-Cheese association", async function() {
+        const board = await Board.findByPk(1)
+        await board.addCheeses([1,2])
+        const cheeseBoard = await Board.findByPk(1, {include: [{model: Cheese, as: "Cheeses"}]})
+        expect(cheeseBoard.Cheeses[0].title).toBe("Brie")
+        expect(cheeseBoard.Cheeses[1].title).toBe("Edam")
+        expect(cheeseBoard.Cheeses[0].description).toBe("Soft")
+        expect(cheeseBoard.Cheeses[1].description).toBe("Hard")
     })
 })
