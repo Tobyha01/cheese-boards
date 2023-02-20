@@ -12,4 +12,10 @@ describe("User, Board and Cheese test suite", function() {
         expect(user.email).toBe("steve123@hotmail.com")
     })
     
+    test("Can create a board", async function() {
+        const board = await Board.create({type: "French", description: "French  Cheese Board", rating: 3})
+        expect(board.type).toBe("French")
+        expect(board.description).toBe("French  Cheese Board")
+        expect(board.rating).toBe(3)
+    })
 })
