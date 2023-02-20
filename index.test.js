@@ -18,4 +18,10 @@ describe("User, Board and Cheese test suite", function() {
         expect(board.description).toBe("French  Cheese Board")
         expect(board.rating).toBe(3)
     })
+
+    test("Can create a cheese", async function() {
+        const cheese = await Cheese.create({title: "Brie", description: "Soft"})
+        expect(cheese.title).toBe("Brie")
+        expect(cheese.description).toBe("Soft")
+    })
 })
